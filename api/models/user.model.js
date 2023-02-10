@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   nursery:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'nursery',
-    required: true,
+    required: [function() {return this.role !== 'admin'}, 'Nursery is required for workers']
   },
   role: {
     type: String,
