@@ -22,7 +22,7 @@ async function login(req, res){
       return res.status(400).send('Email or password incorrect')
     }
     bcrypt.compare(req.body.password, user.password, (err, result) => {
-      if (err) throw new Error(err)
+      if (err) { return err }
       if (!result) {
         return res.json({ error: 'Email or password incorrect' })
       }

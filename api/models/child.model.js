@@ -9,10 +9,6 @@ const childSchema = new mongoose.Schema({
     type: String,
     required: [true, "username is required"],
   },
-  dni: {
-    type: String,
-    unique: [true, "This Dni is registered"],
-  },
   tutors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'tutor',
@@ -32,10 +28,10 @@ const childSchema = new mongoose.Schema({
     required: true,
   },
   alergies: {
-    type: array,
+    type: Array,
   },
   activities: {
-    type: array,
+    type: Array,
   },
 });
 
