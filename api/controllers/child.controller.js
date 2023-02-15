@@ -3,7 +3,7 @@ const Child = require("../models/child.model");
 function getChildren(req, res) {
   Child.find()
     .populate('tutors nursery')
-    .then((child) => res.json(child))
+    .then((children) => res.json(children))
     .catch((err) => res.json(err));
 }
 
