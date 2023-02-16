@@ -12,12 +12,14 @@ const userSchema = new mongoose.Schema({
   },
   dni: {
     type: String,
-    required: [true, 'Dni is required'],
+    required: [true, "Dni is required"],
     unique: [true, "This Dni is registered"],
+    maxLength: [9, "Dni must have 9 characters"],
+    minLength: [9, "Dni must have 9 characters"],
   },
-    phone: {
+  phone: {
     type: Number,
-    required:[true, "Phone number is required"],
+    required: [true, "Phone number is required"],
   },
   email: {
     type: mongoose.SchemaTypes.Email,
@@ -28,15 +30,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  nursery:{
+  nursery: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'nursery',
-    required: [function() {return this.role !== 'admin'}, 'Nursery is required for workers']
+    ref: "nursery",
+    required: [
+      function () {
+        return this.role !== "admin";
+      },
+      "Nursery is required for workers",
+    ],
   },
   role: {
     type: String,
-    enum: ["admin", "user"],
-    default: "user",
+    enum: ["admin", "owner", "chief", "worker"],
+    default: "worker",
   },
 });
 
