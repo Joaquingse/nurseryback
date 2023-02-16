@@ -177,8 +177,8 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 | GET    | '/inout/picks'    | Authenticate user | List all picks   |
 | POST   | '/inout/drop'     | Authenticate user | Create a drop    |
 | POST   | '/inout/pick'     | Authenticate user | Create a pick    |
-| PUT    | '/inout/:id' | admin | Update drop or pick data[^1]  |
-| DELETE | '/inout/:id' | admin | Delete drop or pick data[^1]    |
+| PUT    | '/inout/:id' | admin | Update drop or pick data[^4]  |
+| DELETE | '/inout/:id' | admin | Delete drop or pick data[^4]    |
 ...
 
-[^1]: Depends on action selected (drops or picks)
+[^4]: Depends on action selected (drops or picks)
