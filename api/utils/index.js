@@ -28,8 +28,18 @@ function checkAdmin(req, res, next) {
   }
 }
 
+function checkOwner(req, res, next) {
+  if (res.locals.user.role !== 'admin' && res.locals.user.role !== 'owner') { 
+      return res.status(401).send('User not authorized')
+  } else {
+      next()
+  }
+}
+
+
 
 module.exports = {
   authUser,
-  checkAdmin
+  checkAdmin,
+  checkOwner
 }
