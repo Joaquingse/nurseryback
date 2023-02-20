@@ -1,4 +1,9 @@
 const router = require("express").Router();
+const { authUser,
+  checkAdmin,
+  checkOwner,
+  checkChief
+ } = require('../utils/index')
 
 const {
   getAllTutors,
@@ -8,10 +13,10 @@ const {
   deleteTutor,
 } = require("../controllers/tutor.controller");
 
-router.get("/", getAllTutors);
-router.get("/:id", getTutor);
-router.post("/add", addTutor);
-router.put("/:id", updateTutor);
-router.delete("/:id", deleteTutor);
+router.get("/", authUser, checkOwner, getAllTutors);
+router.get("/:id", authUser, getTutor);
+router.post("/add", authUser, checkOwner, addTutor);
+router.put("/:id", authUser, checkChief, updateTutor);
+router.delete("/:id", authUser, checkOwner, deleteTutor);
 
 module.exports = router;

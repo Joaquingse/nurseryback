@@ -1,4 +1,9 @@
 const router = require('express').Router()
+const { authUser,
+  checkAdmin,
+  checkOwner,
+  checkChief
+ } = require('../utils/index')
 
 const {
   getNursery,
@@ -8,11 +13,11 @@ const {
   deleteNursery
 } = require('../controllers/nursery.controller')
 
-router.get('/', getAllNurseries)
-router.get('/:id', getNursery)
-router.post('/add', addNursery)
-router.put('/:id', updateNursery)
-router.delete('/:id', deleteNursery)
+router.get('/', authUser, checkOwner, getAllNurseries)
+router.get('/:id', authUser, checkOwner, getNursery)
+router.post('/add', authUser, checkOwner, addNursery)
+router.put('/:id', authUser, checkOwner, updateNursery)
+router.delete('/:id', authUser, checkOwner, deleteNursery)
 
 
 module.exports = router
