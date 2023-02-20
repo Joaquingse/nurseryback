@@ -36,10 +36,17 @@ function checkOwner(req, res, next) {
   }
 }
 
-
+function checkChief(req, res, next) {
+  if (res.locals.user.role === 'worker') { 
+      return res.status(401).send('User not authorized')
+  } else {
+      next()
+  }
+}
 
 module.exports = {
   authUser,
   checkAdmin,
-  checkOwner
+  checkOwner,
+  checkChief
 }

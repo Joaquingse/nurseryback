@@ -1,4 +1,8 @@
 const router = require("express").Router();
+const { authUser,
+  checkOwner,
+  checkChief
+ } = require('../utils/index')
 
 const { 
   getChild,
@@ -8,10 +12,10 @@ const {
   deleteChild
  } = require("../controllers/child.controller");
 
-router.get('/', getChildren)
+router.get('/', authUser, checkOwner, getChildren)
 router.get('/:id', getChild)
-router.post('/add', addChild)
-router.put('/:id', updateChild)
-router.delete('/:id', deleteChild)
+router.post('/add', authUser, checkOwner, addChild)
+router.put('/:id', authUser, checkChief, updateChild)
+router.delete('/:id', authUser, checkOwner, deleteChild)
 
 module.exports = router;

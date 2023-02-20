@@ -1,4 +1,7 @@
 const router = require('express').Router()
+const { authUser,
+  checkChief
+ } = require('../utils/index')
 
 const {
   addEvent,
@@ -8,10 +11,10 @@ const {
   deleteEvent
 } = require('../controllers/event.controller')
 
-router.get('/', getAllEvents)
-router.get('/:id', getEvent)
-router.post('/new', addEvent)
-router.put('/:id', editEvent)
-router.delete('/:id', deleteEvent)
+router.get('/', authUser, getAllEvents)
+router.get('/:id', authUser, getEvent)
+router.post('/new', authUser, checkChief, addEvent)
+router.put('/:id', authUser, checkChief, editEvent)
+router.delete('/:id', authUser, checkChief, deleteEvent)
 
 module.exports = router
