@@ -114,7 +114,7 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 
 | METHOD | URL                  | AUTH    | FUNCTION                    |
 |--------|----------------------|---------|-----------------------------|
-| GET    | '/user/'    | admin, owner | List all users           |
+| GET    | '/user/'    | Authenticate user | List all users[^1]           |
 | GET    | '/user/:id'    | Authenticate user | Show user info[^1]    |
 | POST   | '/user/new'     | admin, owner | Create a user account[^2]    |
 | PUT    | '/user/:id' | Authenticate user | Update a user account [^3]   |

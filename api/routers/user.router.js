@@ -12,7 +12,7 @@ const {
   deleteUser
 } = require('../controllers/user.controller')
 
-router.get('/', authUser, checkOwner, getAllUsers)
+router.get('/', authUser, getAllUsers)
 router.get('/:id', authUser, getUser)
 router.post('/new', authUser, checkOwner, createUser)
 router.put('/:id', authUser, updateUser)
