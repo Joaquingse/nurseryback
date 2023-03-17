@@ -1,0 +1,837 @@
+{
+	"info": {
+		"_postman_id": "b8f4578f-3cb5-4646-b0a6-206e4cf77c84",
+		"name": "NurseryBack",
+		"description": "## Nursery Checker Backend project\n\n# CONTEXTO\n\nGestionar el servicio de recogida y entrega de los alumnos a los padres registrando los datos digitalmente.\n\n- Gestión del Staff de la empresa:\n    - Creación de empleados,\n    - Consultar lista de empleados,\n    - Consultas específicas del Staff\n- Gestión de datos de los alumnos:\n    - Creación de alumnos y edición de sus datos,\n    - Consultas de datos de los alumnos,\n    - Control digital de las llegadas y salidas de los alumnos\n\n# DEVELOPER\n\n## [Joaquín Gázquez](https://github.com/Joaquingse)\n\n# REPOSITORY\n\n### [https://github.com/Joaquingse/nurseryback](https://github.com/Joaquingse/nurseryback)\n\n# DB SCHEMAS\n\n## USER\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| name | string |  | YES |  |\n| surname | string |  | YES |  |\n| dni | string |  | YES | unique, maxLength, minLenght |\n| phone | number |  | YES |  |\n| email | Mongoose Schema Type email |  | YES | Mongoose, Unique |\n| password | string |  | YES |  |\n| role | string |  | default = worker | enum: admin, owner, chief, worker |\n| nursery | ObjectId | nursery | {role !== admin} |  |\n\n...\n\n## TUTOR\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| name | string |  | YES |  |\n| surname | string |  | YES |  |\n| dni | string |  | YES | unique, maxLength, minLenght |\n| phone | number |  | YES |  |\n| email | Mongoose Schema Type email |  | YES | Mongoose, Unique |\n| password | string |  | YES |  |\n| relation | string |  | YES | enum: parents, family, others |\n| ... |  |  |  |  |\n\n## CHILD\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| name | string |  | YES |  |\n| surname | string |  | YES |  |\n| tutors | ObjectId | tutor | YES |  |\n| nursery | ObjectId | nursery | YES |  |\n| dinner | Boolean |  | YES |  |\n| early | Boolean |  | YES |  |\n| alergies | Array |  |  |  |\n| activities | Array |  |  |  |\n| ... |  |  |  |  |\n\n## NURSERY\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| name | string |  | YES |  |\n| phone | number |  | YES |  |\n| email | Mongoose Schema Type email |  | YES | Mongoose, Unique |\n| address | string |  | YES | Unique |\n| ... |  |  |  |  |\n\n## EVENT\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| title | string |  | YES |  |\n| date | Date |  | YES |  |\n| attendance | Number |  |  |  |\n| description | string |  |  |  |\n| ... |  |  |  |  |\n\n## DROP\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| child | ObjectId |  | YES |  |\n| date | Date |  | YES |  |\n| who | ObjectId |  | YES |  |\n| ... |  |  |  |  |\n\n## PICK\n\n| KEY | TYPE | REFERENCE | REQUIRED | VALIDATION |\n| --- | --- | --- | --- | --- |\n| child | ObjectId |  | YES |  |\n| date | Date |  | YES |  |\n| who | ObjectId |  | YES |  |\n| ... |  |  |  |  |\n\n# API ROUTES\n\nEnviroment:\n\nRoute {{baseURL}} used in my test, here in docs appears localhost route, you can use it to your local test, remember change it if you deploy it in an external DB.\n\nCollection authentication settings:\n\n<img src=\"https://content.pstmn.io/db22a6e6-916d-461d-9eae-da2c5a92b632/aW1nMS5QTkc=\">\n\n<img src=\"https://content.pstmn.io/b2789a34-7694-4fad-90d7-6bbd659fff6f/aW1nMi5QTkc=\">\n\n<img src=\"https://content.pstmn.io/4decdc7e-f264-4e5b-b074-a1eadbf55fcf/aW1nMy5wbmc=\" alt=\"In%20signup%20route%20and%20login%20route\">\n\n## AUTHENTICATION ENDPOINTS\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| POST | '/auth/signup' | NO | register a user |\n| POST | '/auth/login' | NO | Authenticate a user |\n\n## USERS ENDPOINTS\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| GET | '/user/' | admin, owner | List all users |\n| GET | '/user/:id' | Authenticate user | Show user info\\[^1\\] |\n| POST | '/user/new' | admin, owner | Create a user account\\[^2\\] |\n| PUT | '/user/:id' | Authenticate user | Update a user account \\[^3\\] |\n| DELETE | '/user/:id' | admin | Delete a user account |\n| ... |  |  |  |\n\n\\[^1\\]: Workers and chief can see own info only, admin and owner can see all.  \n\\[^2\\]: Admin can create all type of account, owners only chief and worker types.  \n\\[^3\\]: Only Admin can update data from other account, rest of users can update their own data only.\n\n## TUTORS ENDPOINTS\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| GET | '/tutor/' | admin, owner | List all tutors |\n| GET | '/tutor/:id' | Authenticate user | Show tutor info |\n| POST | '/tutor/add' | admin, owner | Create a tutor |\n| PUT | '/tutor/:id' | admin, owner, chief | Update tutor data |\n| DELETE | '/tutor/:id' | admin, owner | Delete a tutor profile |\n| ... |  |  |  |\n\n## CHILD ENDPOINTS\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| GET | '/child/' | admin, owner | List all childs |\n| GET | '/child/:id' | Authenticate user | Show child info |\n| POST | '/child/add' | admin, owner | Create a child |\n| PUT | '/child/:id' | admin, owner, chief | Update child data |\n| DELETE | '/child/:id' | admin, owner | Delete a child profile |\n| ... |  |  |  |\n\n## NURSERY ENDPOINTS\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| GET | '/nursery/' | admin, owner | List all nurseries |\n| GET | '/nursery/:id' | admin, owner | Show nursery info |\n| POST | '/nursery/add' | admin, owner | Create a nursery |\n| PUT | '/nursery/:id' | admin, owner | Update nursery data |\n| DELETE | '/nursery/:id' | admin, owner | Delete a nursery profile |\n| ... |  |  |  |\n\n## EVENT ENDPOINTS\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| GET | '/event/' | Authenticate user | List all events |\n| GET | '/event/:id' | Authenticate user | Show event info |\n| POST | '/event/add' | admin, owner, chief | Create an event |\n| PUT | '/event/:id' | admin, owner, chief | Update event data |\n| DELETE | '/event/:id' | admin, owner, chief | Delete an event |\n| ... |  |  |  |\n\n## INOUT ENDPOINTS (drop and pick child register)\n\n| METHOD | URL | AUTH | FUNCTION |\n| --- | --- | --- | --- |\n| GET | '/inout/drops' | Authenticate user | List all drops |\n| GET | '/inout/picks' | Authenticate user | List all picks |\n| POST | '/inout/drop' | Authenticate user | Create a drop |\n| POST | '/inout/pick' | Authenticate user | Create a pick |\n| PUT | '/inout/:id' | admin | Update drop or pick data\\[^4\\] |\n| DELETE | '/inout/:id' | admin | Delete drop or pick data\\[^4\\] |\n| ... |  |  |  |\n\n\\[^4\\]: Depends on action selected (drops or picks)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24060134"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "signup route",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const result = pm.response.json()\r",
+									"\r",
+									"pm.environment.set('token', result.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"otro\",\r\n    \"surname\": \"apellido\",\r\n    \"dni\": \"14785236B\",\r\n    \"password\": \"1234\",\r\n    \"email\":\"admin2@staff.com\",\r\n    \"phone\":\"698745214\",\r\n    \"role\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/signup",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Signup for admin does not need nursery data, but is mandatory for the rest of users (owner, chief, worker)"
+					},
+					"response": []
+				},
+				{
+					"name": "Login route",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const result = pm.response.json()\r",
+									"\r",
+									"pm.environment.set('token', result.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"owner@staff.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Signup and Login routes, This signup is used by the admin to create new owners accounts, or other admins accounts.\n\nThe login route is for all the users, to get the token and stay authenticated in the app."
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "GET user info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/63e9f570ab94dc0f1a2680b8",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"63e9f570ab94dc0f1a2680b8"
+							]
+						},
+						"description": "You can get user´s info by user ID, remember the level of authentication you need.\n\nIf you want to get a list of all users or users with especific params, you can try:\n\n- user/ get all users\n- user?param=query get especific users"
+					},
+					"response": []
+				},
+				{
+					"name": "New user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"worker2\",\r\n    \"surname\": \"surname\",\r\n    \"dni\": \"48567953D\",\r\n    \"password\": \"1234\",\r\n    \"email\":\"worker2@staff.com\",\r\n    \"phone\":\"625325899\",\r\n    \"role\": \"worker\",\r\n    \"nursery\": \"63ea05b8f1aa7d1bb6b19023\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/new",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"new"
+							]
+						},
+						"description": "In this request, you can create a new user, depends on the type (admin, owner, chief or worker) you have to introduce the nursery param or not, remember only admins can create admin and owner users."
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"surname\": \"apellido3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/63e9f570ab94dc0f1a2680b8",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"63e9f570ab94dc0f1a2680b8"
+							]
+						},
+						"description": "This request updates the field you choose to modify, you can update all or a specific field."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/63e9f570ab94dc0f1a2680b8",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"63e9f570ab94dc0f1a2680b8"
+							]
+						},
+						"description": "This request to delete users from User collection, check authorizations to do it."
+					},
+					"response": []
+				}
+			],
+			"description": "Users folder contains all the actions to be used with the users data."
+		},
+		{
+			"name": "NURSERY",
+			"item": [
+				{
+					"name": "add/create nursery",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Micky mouse\",\r\n    \"phone\":\"928987654\",\r\n    \"email\": \"mickymouse@mail.com\",\r\n    \"address\": \"c/micky nº 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/nursery/add",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"nursery",
+								"add"
+							]
+						},
+						"description": "This action add a new nursery into the Nursery collection."
+					},
+					"response": []
+				},
+				{
+					"name": "get all nursery",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Micky mouse\",\r\n    \"phone\":\"928987654\",\r\n    \"email\": \"mickymouse@mail.com\",\r\n    \"address\": \"c/micky nº 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/nursery/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"nursery",
+								""
+							]
+						},
+						"description": "This request show you a list of all nurseries in the collection."
+					},
+					"response": []
+				},
+				{
+					"name": "Get a nursery",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Micky mouse\",\r\n    \"phone\":\"928987654\",\r\n    \"email\": \"mickymouse@mail.com\",\r\n    \"address\": \"c/micky nº 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/nursery/63ea05b8f1aa7d1bb6b19023",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"nursery",
+								"63ea05b8f1aa7d1bb6b19023"
+							]
+						},
+						"description": "This request show you an specific nursery in the collection."
+					},
+					"response": []
+				},
+				{
+					"name": "Update a nursery",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"c/Pepa nº 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/nursery/63ea05b8f1aa7d1bb6b19023",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"nursery",
+								"63ea05b8f1aa7d1bb6b19023"
+							]
+						},
+						"description": "Update data from a nursery, you can update one or more fields at the same time."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a nursery",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/nursery/63ea06e9f1aa7d1bb6b19027",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"nursery",
+								"63ea06e9f1aa7d1bb6b19027"
+							]
+						},
+						"description": "Delete a nursery from the collection."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TUTORS",
+			"item": [
+				{
+					"name": "Add tutor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Person3\",\r\n    \"surname\": \"apellido3\",\r\n    \"dni\": \"58965472H\",\r\n    \"email\":\"person@tutor.com\",\r\n    \"phone\":\"658952361\",\r\n    \"relation\": \"family\"\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/tutor/add",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tutor",
+								"add"
+							]
+						},
+						"description": "This request add a tutor document into Tutors collection."
+					},
+					"response": []
+				},
+				{
+					"name": "get all tutors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/tutor/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tutor",
+								""
+							]
+						},
+						"description": "Get a list of all tutors."
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Tutor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/tutor/63ea14c5f3ecf78f1ad37722",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tutor",
+								"63ea14c5f3ecf78f1ad37722"
+							]
+						},
+						"description": "Get a specific tutor, you need the tutor ID to get it."
+					},
+					"response": []
+				},
+				{
+					"name": "Update a tutor",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"surname\":\"apellidoTres\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/tutor/63f348e53124f96ad48106ae",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tutor",
+								"63f348e53124f96ad48106ae"
+							]
+						},
+						"description": "Update tutor document in the collection."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Tutor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/tutor/63f348e53124f96ad48106ae",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tutor",
+								"63f348e53124f96ad48106ae"
+							]
+						},
+						"description": "Delete a tutor document from the Tutors collection."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CHILDS",
+			"item": [
+				{
+					"name": "Add childs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"niño 2\",\r\n    \"surname\": \"apellido 2\",\r\n    \"tutors\": \"63eb584590b0ab5791005121\",\r\n    \"nursery\": \"63ea05b8f1aa7d1bb6b19023\",\r\n    \"dinner\": \"false\",\r\n    \"early\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/child/add",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"child",
+								"add"
+							]
+						},
+						"description": "Add new childs to the DB."
+					},
+					"response": []
+				},
+				{
+					"name": "Get children",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/child",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"child"
+							]
+						},
+						"description": "List all children."
+					},
+					"response": []
+				},
+				{
+					"name": "Get child info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/child/63eb5ab45da0e733f41e2cef",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"child",
+								"63eb5ab45da0e733f41e2cef"
+							]
+						},
+						"description": "Get specific child from the collection, You must have the child ID to get it."
+					},
+					"response": []
+				},
+				{
+					"name": "Update child",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"surname\": \"apellido 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/child/63eb5ab45da0e733f41e2cef",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"child",
+								"63eb5ab45da0e733f41e2cef"
+							]
+						},
+						"description": "Update child info."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete child",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/child/63eb5acc5da0e733f41e2cf1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"child",
+								"63eb5acc5da0e733f41e2cf1"
+							]
+						},
+						"description": "Delete a child from the collection."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EVENTS",
+			"item": [
+				{
+					"name": "Add new event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Evento 2\",\r\n    \"date\": \"2023-02-18, 10:00\",\r\n    \"attendance\": 15,\r\n    \"description\": \"Manualidades con pintura\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/event/new",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"new"
+							]
+						},
+						"description": "Add an event to the collection."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/event/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								""
+							]
+						},
+						"description": "List all events."
+					},
+					"response": []
+				},
+				{
+					"name": "Get an event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/event/63eca2282bd35dbb506e89c4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"63eca2282bd35dbb506e89c4"
+							]
+						},
+						"description": "Get a specific event."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit an event",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2023-02-19, 10:30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/event/63eca2282bd35dbb506e89c4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"63eca2282bd35dbb506e89c4"
+							]
+						},
+						"description": "Update event data."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/event/63eca2962bd35dbb506e89c6",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"63eca2962bd35dbb506e89c6"
+							]
+						},
+						"description": "Delete an event."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CHECK IN-OUT",
+			"item": [
+				{
+					"name": "Dropoff child",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"child\": \"63eb6fdb2fcfd5062996ebce\",\r\n    \"date\":\"2023-02-14, 08:50\",\r\n    \"who\": \"63ea14c5f3ecf78f1ad37722\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/inout/drop",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"inout",
+								"drop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pickup child",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"child\": \"63eb6fdb2fcfd5062996ebce\",\r\n    \"date\":\"2023-02-14, 14:50\",\r\n    \"who\": \"63ea14c5f3ecf78f1ad37722\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/inout/pick",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"inout",
+								"pick"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get drops or picks (chg route to /drops or /picks)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/inout/picks?child=63eb5ab45da0e733f41e2cef",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"inout",
+								"picks"
+							],
+							"query": [
+								{
+									"key": "child",
+									"value": "63eb5ab45da0e733f41e2cef"
+								}
+							]
+						},
+						"description": "This request can get picks list or drop list, You can try:\n\n- inout/picks list all picks\n- inout/drops list all drops\n- inout/picks?query=params list specific picks\n- inout/drops?query=params list specific drops"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "token",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
