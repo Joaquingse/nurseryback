@@ -12,7 +12,7 @@ const {
   deleteChild
  } = require("../controllers/child.controller");
 
-router.get('/', authUser, checkOwner, getChildren)
+router.get('/', authUser, getChildren)
 router.get('/:id', getChild)
 router.post('/add', authUser, checkOwner, addChild)
 router.put('/:id', authUser, checkChief, updateChild)

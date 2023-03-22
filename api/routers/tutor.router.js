@@ -13,7 +13,7 @@ const {
   deleteTutor,
 } = require("../controllers/tutor.controller");
 
-router.get("/", authUser, checkOwner, getAllTutors);
+router.get("/", authUser, getAllTutors);
 router.get("/:id", authUser, getTutor);
 router.post("/add", authUser, checkOwner, addTutor);
 router.put("/:id", authUser, checkChief, updateTutor);
