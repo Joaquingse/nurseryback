@@ -107,8 +107,8 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 
 | METHOD | URL             | AUTH | FUNCTION                 |
 |--------|-----------------|------|--------------------------|
-| POST   | '/auth/signup'   | NO   | register a user      |
-| POST   | '/auth/login'   | NO   | Authenticate a user      |
+| POST   | '/auth/signup'   | NO   | register an user      |
+| POST   | '/auth/login'   | NO   | Authenticate an user      |
 
 ## USERS ENDPOINTS
 
@@ -116,9 +116,9 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 |--------|----------------------|---------|-----------------------------|
 | GET    | '/user/'    | Authenticate user | List all users[^1]           |
 | GET    | '/user/:id'    | Authenticate user | Show user info[^1]    |
-| POST   | '/user/new'     | admin, owner | Create a user account[^2]    |
-| PUT    | '/user/:id' | Authenticate user | Update a user account [^3]   |
-| DELETE | '/user/:id' | admin | Delete a user account    |
+| POST   | '/user/new'     | admin, owner | Create an user account[^2]    |
+| PUT    | '/user/:id' | Authenticate user | Update an user account [^3]   |
+| DELETE | '/user/:id' | admin | Delete an user account    |
 ...
 
 [^1]: Workers and chief can see own info only, admin and owner can see all.
