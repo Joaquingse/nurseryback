@@ -129,7 +129,7 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 
 | METHOD | URL               | AUTH | FUNCTION                          |
 |--------|-------------------|------|-----------------------------------|
-| GET    | '/tutor/'    | admin, owner | List all tutors     |
+| GET    | '/tutor/'    | Authenticate user | List all tutors     |
 | GET    | '/tutor/:id'    | Authenticate user | Show tutor info    |
 | POST   | '/tutor/add'     | admin, owner | Create a tutor    |
 | PUT    | '/tutor/:id' | admin, owner, chief | Update tutor data    |
@@ -140,7 +140,7 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 
 | METHOD | URL                   | AUTH | FUNCTION                                 |
 |--------|-----------------------|------|------------------------------------------|
-| GET    | '/child/'    | admin, owner | List all childs     |
+| GET    | '/child/'    | Authenticate user | List all childs     |
 | GET    | '/child/:id'    | Authenticate user | Show child info    |
 | POST   | '/child/add'     | admin, owner | Create a child    |
 | PUT    | '/child/:id' | admin, owner, chief | Update child data    |
