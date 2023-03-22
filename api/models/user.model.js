@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  nursery: [{
+  nursery: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "nursery",
     required: [
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
       },
       "Nursery is required for workers",
     ],
-  }],
+  },
   role: {
     type: String,
     enum: ["admin", "owner", "chief", "worker"],

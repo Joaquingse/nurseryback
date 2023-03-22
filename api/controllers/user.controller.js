@@ -3,20 +3,24 @@ const bcrypt = require("bcrypt");
 
 function getUser(req, res) {
   Users.findById(req.params.id)
-  .populate('nursery')
+    .populate("nursery")
     .then((user) => res.json(user))
     .catch((err) => res.json(err));
 }
 
 function getAllUsers(req, res) {
   Users.find(req.query)
-    .then((users) =>res.json(users))
+    .populate("nursery")
+    .then((users) => res.json(users))
     .catch((err) => res.json(err));
 }
 
 function createUser(req, res) {
   if (req.body.password) {
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
+    req.body.password = bcrypt.hashSync(
+      req.body.password,
+      10
+    );
   }
   Users.create(req.body)
     .then((user) => res.json(user))
@@ -25,7 +29,10 @@ function createUser(req, res) {
 
 function updateUser(req, res) {
   if (req.body.password) {
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
+    req.body.password = bcrypt.hashSync(
+      req.body.password,
+      10
+    );
   }
   Users.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -45,5 +52,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  getAllUsers
+  getAllUsers,
 };
