@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 function getUser(req, res) {
   Users.findById(req.params.id)
+  .populate('nursery')
     .then((user) => res.json(user))
     .catch((err) => res.json(err));
 }
