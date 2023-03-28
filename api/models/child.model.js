@@ -22,10 +22,12 @@ const childSchema = new mongoose.Schema({
   dinner: {
     type: Boolean,
     required: true,
+    default: false
   },
   early: {
     type: Boolean,
     required: true,
+    default: false
   },
   alergies: {
     type: Array,
