@@ -12,7 +12,7 @@ const tutorSchema = new mongoose.Schema({
   },
   dni: {
     type: String,
-    required: [true, 'Dni is required'],
+    required: [true, "Dni is required"],
     unique: [true, "This Dni is registered"],
   },
   email: {
@@ -22,12 +22,12 @@ const tutorSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    required:[true, "Phone number is required"],
+    required: [true, "Phone number is required"],
   },
   relation: {
     type: String,
-    enum: ['parents', 'family', 'others'],
-    required:[true, "Relation is required"],
+    enum: ["parents", "family", "others"],
+    required: [true, "Relation is required"],
   },
 });
 
