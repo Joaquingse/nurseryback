@@ -1,7 +1,7 @@
 const Child = require("../models/child.model");
 
 function getChildren(req, res) {
-  Child.find()
+  Child.find(req.query)
     .populate('tutors nursery')
     .then((children) => res.json(children))
     .catch((err) => res.json(err));
