@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const { authUser,
   checkOwner,
   checkChief
@@ -9,7 +10,8 @@ const {
   getChildren,
   addChild,
   updateChild,
-  deleteChild
+  deleteChild,
+  addTutor
  } = require("../controllers/child.controller");
 
 router.get('/', authUser, getChildren)
