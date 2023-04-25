@@ -164,7 +164,7 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 |--------|----------------|---------|----------------------------|
 | GET    | '/event/'    | Authenticate user | List all events     |
 | GET    | '/event/:id'    | Authenticate user | Show event info    |
-| POST   | '/event/add'     | admin, owner, chief | Create an event    |
+| POST   | '/event/new'     | admin, owner, chief | Create an event    |
 | PUT    | '/event/:id' | admin, owner, chief | Update event data    |
 | DELETE | '/event/:id' | admin, owner, chief | Delete an event     |
 ...
