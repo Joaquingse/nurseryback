@@ -47,10 +47,23 @@ function deleteUser(req, res) {
     .catch((err) => res.json(err));
 }
 
+async function updatePassword(req, res) {
+  const { currentP, newP } = req.body
+  const user = await Users.findById(req.params.id)
+  const match = await bcrypt.compare(currentP,user.password)
+  if(!match){
+    return res.status(401).json({message: "El password no existe"})
+  } 
+  user.password = bcrypt.hashSync(newP,10)
+  user.save()
+  res.json({message: "¡Password actualizado!"})
+}
+
 module.exports = {
   getUser,
   createUser,
   updateUser,
   deleteUser,
   getAllUsers,
+  updatePassword
 };
