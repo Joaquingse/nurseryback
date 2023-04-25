@@ -117,6 +117,7 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 | GET    | '/user/'    | Authenticate user | List all users[^1]           |
 | GET    | '/user/:id'    | Authenticate user | Show user info[^1]    |
 | POST   | '/user/new'     | admin, owner | Create an user account[^2]    |
+| POST   | '/user/:id'  | Authenticate user | change own password |
 | PUT    | '/user/:id' | Authenticate user | Update an user account [^3]   |
 | DELETE | '/user/:id' | admin | Delete an user account    |
 ...
@@ -164,7 +165,7 @@ Gestionar el servicio de recogida y entrega de los alumnos a los padres registra
 |--------|----------------|---------|----------------------------|
 | GET    | '/event/'    | Authenticate user | List all events     |
 | GET    | '/event/:id'    | Authenticate user | Show event info    |
-| POST   | '/event/new'     | admin, owner, chief | Create an event    |
+| POST   | '/event/add'     | admin, owner, chief | Create an event    |
 | PUT    | '/event/:id' | admin, owner, chief | Update event data    |
 | DELETE | '/event/:id' | admin, owner, chief | Delete an event     |
 ...
