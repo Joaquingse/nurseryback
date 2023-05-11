@@ -11,7 +11,7 @@ const router = require("./api/routers/index");
 const mongooseStart = async () => {
     try {
         await mongoose.connect(
-            process.env.MONGO_URL || "mongodb://localhost:27017/",
+            process.env.MONGO_URL || "mongodb+srv://portdbuser:tBZfXE8n9LEGv84@portdb.7fjckrd.mongodb.net/?retryWrites=true&w=majority",
             {
                 dbName: process.env.MONGO_DB || "nurseryback",
             }
